@@ -1,10 +1,10 @@
 import { Elysia, t } from "elysia";
 import { AuthService } from "../services/auth.services";
+import { basePlugin } from "../db/base.plugin";
 
 
 const authservice = new AuthService();
-// TODO preciso remover o db null ali posteriormente, coloquei só pra evitar erro de tipagem por agr
-export const authRoutes = new Elysia({ prefix: "/auth" }).decorate("db", null).post(
+export const authRoutes = new Elysia({ prefix: "/auth" }).use(basePlugin).post(
   "/register",
   ({ db, body}) => {
     return authservice.register(body, db);
