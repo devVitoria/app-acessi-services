@@ -1,10 +1,11 @@
 import { Elysia, t } from "elysia";
 import { AuthService } from "../services/auth.services";
-import { basePlugin } from "../db/base.plugin";
+import { basePlugin } from "../plugins/base.plugin";
+import { jwtPlugin } from "../plugins/jwt.plugin";
 
 
 const authservice = new AuthService();
-export const authRoutes = new Elysia({ prefix: "/auth" }).use(basePlugin).post(
+export const authRoutes = new Elysia({ prefix: "/auth" }).use(basePlugin).use(jwtPlugin).post(
   "/register",
   ({ db, body}) => {
     return authservice.register(body, db);
@@ -31,4 +32,23 @@ export const authRoutes = new Elysia({ prefix: "/auth" }).use(basePlugin).post(
       }),
     }),
   }
-);
+).post(
+  "/login",
+  ({ db, body, jwt }) => { 
+    return authservice.login(body, db, jwt);
+   }, 
+   {
+    body: t.Object({
+      cpf: t.String({
+        minLength: 11,
+        maxLength: 11,
+        error: "CPF inválido",
+        
+      }),
+      password: t.String({
+        minLength: 6,
+        maxLength: 6,
+      }),
+    }),
+  }
+  ) ;

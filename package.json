@@ -3,9 +3,12 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "generate:migration": "npx drizzle-kit generate",
+    "apply:migration": "npx drizzle-kit migrate" 
   },
   "dependencies": {
+    "@elysiajs/jwt": "^1.4.0",
     "@sinclair/typebox": "^0.34.47",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
