@@ -5,7 +5,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
     "generate:migration": "npx drizzle-kit generate",
-    "apply:migration": "npx drizzle-kit migrate" 
+    "apply:migration": "npx drizzle-kit migrate",
+    "format": "biome format --write ./src",
+    "lint": "biome lint ./src",
+    "check": "biome check --write ./src"
   },
   "dependencies": {
     "@elysiajs/jwt": "^1.4.0",
@@ -16,6 +19,7 @@
     "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
     "@types/pg": "^8.16.0",
     "bun-types": "latest",
     "drizzle-kit": "^0.31.8",
