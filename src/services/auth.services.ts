@@ -24,8 +24,10 @@ export class AuthService {
 	}
 
 	async register(data: RegisterInterface, db: any) {
-		const validation = await this.existingUser(data.cpf, db);
-
+    
+		
+    try {
+      const validation = await this.existingUser(data.cpf, db);
 		if (validation) {
 			throw new Error("Usuário já cadastrado com esse CPF.");
 		}
@@ -40,9 +42,14 @@ export class AuthService {
 		return {
 			message: `Registrado com sucesso. CPF: ${data.cpf}`,
 		};
+  } catch (e) {
+    throw new Error("Erro ao registrar," , e ?? '')
+
+}
 	}
 
 	async login(data: LoginInterface, db: any, jwt: JwtPayloadInterface) {
+    try {
 		const validation = this.existingUser(data.cpf, db);
 
 		if (!validation) {
@@ -68,12 +75,7 @@ export class AuthService {
 			email: user[0].email,
 			cpf: user[0].cpf,
 		});
-
-		const tokenExists = await db
-			.select()
-			.from(this.tokens)
-			.where(eq(this.tokens.userId, user[0].id));
-
+    
 		await db
 			.insert(this.tokens)
 			.values({
@@ -90,4 +92,7 @@ export class AuthService {
 			token: tkUser,
 		};
 	}
+catch (e) {
+throw new Error("Erro ao logar", e  ?? '')
 }
+}}
