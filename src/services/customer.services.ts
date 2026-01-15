@@ -68,7 +68,7 @@ export class CustomerService {
 
 			await db
 				.update(this.users)
-				.set({ emailCode: null })
+				.set({ emailCode: null, validated: true})
 				.where(eq(this.users.cpf, data.cpf));
 
 			return {

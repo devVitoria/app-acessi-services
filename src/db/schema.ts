@@ -1,4 +1,4 @@
-import { text } from "drizzle-orm/gel-core";
+import { boolean, text } from "drizzle-orm/gel-core";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
@@ -8,6 +8,7 @@ export const usersTable = pgTable("users", {
 	cpf: varchar({ length: 11 }).notNull().unique(),
 	emailCode: integer(),
 	password: varchar({ length: 6 }).notNull(),
+	validated: boolean().notNull().default(false)
 });
 
 export const tokensTable = pgTable("tokens", {
