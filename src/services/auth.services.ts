@@ -24,7 +24,6 @@ export class AuthService {
 	}
 
 	async register(data: RegisterInterface, db: any) {
-
 		try {
 			const validation = await this.existingUser(data.cpf, db);
 			if (validation) {

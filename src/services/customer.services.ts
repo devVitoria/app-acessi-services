@@ -1,6 +1,10 @@
 import { eq } from "drizzle-orm";
 import { usersTable } from "../db/schema";
-import { SendCodeInterface } from "../utils/interface";
+import {
+	ResetPasswordInterface,
+	SendCodeInterface,
+	VerifyCodeInterface,
+} from "../utils/interface";
 import { sendMail } from "./mail.services";
 
 export class CustomerService {
@@ -8,7 +12,7 @@ export class CustomerService {
 
 	async sendCode(data: SendCodeInterface, db: any) {
 		try {
-			const chanel = await db
+			const channel = await db
 				.select({
 					email: this.users.email,
 					name: this.users.name,
@@ -16,7 +20,7 @@ export class CustomerService {
 				.from(this.users)
 				.where(eq(this.users.cpf, data.cpf));
 
-				if (chanel.length === 0) {
+			if (channel.length === 0) {
 				throw new Error("Canal não encontrado");
 			}
 
@@ -27,23 +31,77 @@ export class CustomerService {
 				.set({ emailCode: code })
 				.where(eq(this.users.cpf, data.cpf));
 
-		
 			const code_sent = await sendMail({
 				code: code,
-				name: chanel[0].name,
-				email: chanel[0].email,
+				name: channel[0].name,
+				email: channel[0].email,
 			});
-
 
 			return {
 				message: `Código enviado ao canal de recuperação`,
-				id: code_sent
+				id: code_sent,
 			};
 		} catch (e) {
-			throw new Error(
-				"Erro ao enviar código de recuperação de senha,",
-				e ?? "",
-			);
+			throw new Error(`Erro ao enviar código de recuperação ${e ?? ""}`);
+		}
+	}
+
+	async verifyCode(data: VerifyCodeInterface, db: any) {
+		try {
+			const code = await db
+				.select({
+					emailCode: this.users.emailCode,
+				})
+				.from(this.users)
+				.where(eq(this.users.cpf, data.cpf));
+
+			if (code.length === 0) {
+				throw new Error("Código não encontrado");
+			}
+
+			if (String(code[0].emailCode) !== String(data.code)) {
+				return {
+					status: "unauthorized",
+					message: "Código não corresponde.",
+				};
+			}
+
+			await db
+				.update(this.users)
+				.set({ emailCode: null })
+				.where(eq(this.users.cpf, data.cpf));
+
+			return {
+				status: "authorized",
+				message: `Autorizado`,
+			};
+		} catch (e) {
+			throw new Error(`Erro ao verificar código de recuperação ${e ?? ""}`);
+		}
+	}
+
+	async resetPassword(data: ResetPasswordInterface, db: any) {
+		try {
+			const user = await db
+				.select()
+				.from(this.users)
+				.where(eq(this.users.cpf, data.cpf));
+
+			if (user.length === 0) {
+				throw new Error("Usuário nao encontrado");
+			}
+
+			await db
+				.update(this.users)
+				.set({ password: data.newPsd })
+				.where(eq(this.users.cpf, data.cpf));
+
+			return {
+				status: "success",
+				message: `Senha resetada com sucesso!`,
+			};
+		} catch (e) {
+			throw new Error(`Erro ao atualizar senha ${e ?? ""}`);
 		}
 	}
 }

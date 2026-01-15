@@ -27,3 +27,13 @@ export interface SendEmailCodeInterface {
 	email: string;
 	name: string;
 }
+
+export interface VerifyCodeInterface {
+	code: string;
+	cpf: string;
+}
+
+export interface ResetPasswordInterface {
+	cpf: string;
+	newPsd: string;
+}

@@ -47,6 +47,6 @@ export async function sendMail(data: SendEmailCodeInterface) {
 
 		return response.json();
 	} catch (e) {
-    throw new Error("Erro BREVO API", e ?? '')
+		throw new Error("Erro BREVO API", e ?? "");
 	}
 }
