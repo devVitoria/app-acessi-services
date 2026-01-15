@@ -4,6 +4,7 @@ import {
 	JwtPayloadInterface,
 	LoginInterface,
 	RegisterInterface,
+	UserJwtPayload,
 } from "../utils/interface";
 
 export class AuthService {
@@ -45,7 +46,11 @@ export class AuthService {
 		}
 	}
 
-	async login(data: LoginInterface, db: any, jwt: JwtPayloadInterface) {
+	async login(
+		data: LoginInterface,
+		db: any,
+		jwt: JwtPayloadInterface<UserJwtPayload>,
+	) {
 		try {
 			const validation = this.existingUser(data.cpf, db);
 

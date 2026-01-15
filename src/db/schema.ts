@@ -1,5 +1,11 @@
-import { boolean, text } from "drizzle-orm/gel-core";
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import {
+	integer,
+	pgTable,
+	varchar,
+	boolean,
+	timestamp,
+	text,
+} from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -7,8 +13,9 @@ export const usersTable = pgTable("users", {
 	email: varchar({ length: 255 }).notNull().unique(),
 	cpf: varchar({ length: 11 }).notNull().unique(),
 	emailCode: integer(),
+	created_at: timestamp().defaultNow().notNull(),
 	password: varchar({ length: 6 }).notNull(),
-	validated: boolean().notNull().default(false)
+	validated: boolean().notNull().default(false),
 });
 
 export const tokensTable = pgTable("tokens", {

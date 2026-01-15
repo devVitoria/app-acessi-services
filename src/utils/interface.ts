@@ -8,14 +8,16 @@ export interface RegisterInterface extends LoginInterface {
 	email: string;
 }
 
-export interface JwtPayloadInterface {
-	sign(
-		signValue: Omit<ClaimType, NormalizedClaim> & JWTPayloadInput,
-	): Promise<string>;
-	verify(
-		jwt?: string,
-		options?: JWTVerifyOptions,
-	): Promise<false | (ClaimType & Omit<JWTPayloadSpec, never>)>;
+export interface JwtPayloadInterface<TPayload> {
+	sign(payload: TPayload): Promise<string>;
+	verify(jwt?: string): Promise<false | TPayload>;
+}
+
+export interface UserJwtPayload {
+	userId: number;
+	name: string;
+	email: string;
+	cpf: string;
 }
 
 export interface SendCodeInterface {

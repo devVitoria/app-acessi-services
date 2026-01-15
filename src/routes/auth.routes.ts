@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { AuthService } from "../services/auth.services";
 import { basePlugin } from "../plugins/base.plugin";
 import { jwtPlugin } from "../plugins/jwt.plugin";
+import { JwtPayloadInterface, UserJwtPayload } from "../utils/interface";
 
 const authservice = new AuthService();
 export const authRoutes = new Elysia({ prefix: "/auth" })
@@ -37,7 +38,12 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
 	.post(
 		"/login",
 		({ db, body, jwt }) => {
-			return authservice.login(body, db, jwt);
+			// TODO: corrigir futuramente, tipagem fixa do jwt
+			return authservice.login(
+				body,
+				db,
+				jwt as unknown as JwtPayloadInterface<UserJwtPayload>,
+			);
 		},
 		{
 			body: t.Object({
