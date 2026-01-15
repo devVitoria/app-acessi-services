@@ -11,6 +11,7 @@ CREATE TABLE "users" (
 	"email" varchar(255) NOT NULL,
 	"cpf" varchar(11) NOT NULL,
 	"emailCode" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL,
 	"password" varchar(6) NOT NULL,
 	"validated" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email"),

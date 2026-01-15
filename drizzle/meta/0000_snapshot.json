@@ -1,5 +1,5 @@
 {
-  "id": "d8e7ff39-bb07-4031-b2a7-a0cb0d5f3009",
+  "id": "38459b85-2bc2-4390-996d-28eeecffbf55",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -107,11 +107,31 @@
           "primaryKey": false,
           "notNull": true
         },
+        "emailCode": {
+          "name": "emailCode",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
         "password": {
           "name": "password",
           "type": "varchar(6)",
           "primaryKey": false,
           "notNull": true
+        },
+        "validated": {
+          "name": "validated",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},

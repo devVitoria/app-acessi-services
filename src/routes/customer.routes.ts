@@ -28,8 +28,8 @@ export const customerRoutes = new Elysia({ prefix: "/customer" })
 		{
 			body: t.Object({
 				code: t.String({
-					minLength: 6,
-					maxLength: 6,
+					minLength: 4,
+					maxLength: 4,
 				}),
 				cpf: t.String({
 					minLength: 11,

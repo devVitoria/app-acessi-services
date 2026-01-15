@@ -12,24 +12,33 @@ export class AuthService {
 	private tokens = tokensTable;
 
 	async existingUser(cpf: string, db: any) {
+    try {
 		const user = await db
 			.select()
 			.from(this.users)
 			.where(eq(this.users.cpf, cpf))
 			.limit(1);
-
+      
 		if (user.length > 0) {
 			return true;
 		}
 		return false;
-	}
+	} catch (e) {
+			throw new Error("Erro ao verificar usuário", e ?? "");
+  }
+
+} 
 
 	async register(data: RegisterInterface, db: any) {
+    
 		try {
+
 			const validation = await this.existingUser(data.cpf, db);
-			if (validation) {
+ 
+      if (validation) {
 				throw new Error("Usuário já cadastrado com esse CPF.");
 			}
+
 
 			await db.insert(usersTable).values({
 				name: data.name,
@@ -38,11 +47,12 @@ export class AuthService {
 				password: data.password,
 			});
 
+
 			return {
 				message: `Registrado com sucesso. CPF: ${data.cpf}`,
 			};
 		} catch (e) {
-			throw new Error("Erro ao registrar,", e ?? "");
+			throw new Error("Erro ao registrar", e ?? "");
 		}
 	}
 
