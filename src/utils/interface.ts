@@ -17,3 +17,13 @@ export interface JwtPayloadInterface {
 		options?: JWTVerifyOptions,
 	): Promise<false | (ClaimType & Omit<JWTPayloadSpec, never>)>;
 }
+
+export interface SendCodeInterface {
+	cpf: string;
+}
+
+export interface SendEmailCodeInterface {
+	code: number;
+	email: string;
+	name: string;
+}

@@ -24,75 +24,73 @@ export class AuthService {
 	}
 
 	async register(data: RegisterInterface, db: any) {
-    
-		
-    try {
-      const validation = await this.existingUser(data.cpf, db);
-		if (validation) {
-			throw new Error("Usuário já cadastrado com esse CPF.");
+
+		try {
+			const validation = await this.existingUser(data.cpf, db);
+			if (validation) {
+				throw new Error("Usuário já cadastrado com esse CPF.");
+			}
+
+			await db.insert(usersTable).values({
+				name: data.name,
+				email: data.email,
+				cpf: data.cpf,
+				password: data.password,
+			});
+
+			return {
+				message: `Registrado com sucesso. CPF: ${data.cpf}`,
+			};
+		} catch (e) {
+			throw new Error("Erro ao registrar,", e ?? "");
 		}
-
-		await db.insert(usersTable).values({
-			name: data.name,
-			email: data.email,
-			cpf: data.cpf,
-			password: data.password,
-		});
-
-		return {
-			message: `Registrado com sucesso. CPF: ${data.cpf}`,
-		};
-  } catch (e) {
-    throw new Error("Erro ao registrar," , e ?? '')
-
-}
 	}
 
 	async login(data: LoginInterface, db: any, jwt: JwtPayloadInterface) {
-    try {
-		const validation = this.existingUser(data.cpf, db);
+		try {
+			const validation = this.existingUser(data.cpf, db);
 
-		if (!validation) {
-			throw new Error("Usuário não encontrado.");
-		}
+			if (!validation) {
+				throw new Error("Usuário não encontrado.");
+			}
 
-		const user = await db
-			.select()
-			.from(this.users)
-			.where(
-				eq(this.users.cpf, data.cpf),
-				eq(this.users.password, data.password),
-			)
-			.limit(1);
+			const user = await db
+				.select()
+				.from(this.users)
+				.where(
+					eq(this.users.cpf, data.cpf),
+					eq(this.users.password, data.password),
+				)
+				.limit(1);
 
-		if (user.length === 0) {
-			throw new Error("CPF ou senha inválidos.");
-		}
+			if (user.length === 0) {
+				throw new Error("CPF ou senha inválidos.");
+			}
 
-		const tkUser = await jwt.sign({
-			userId: user[0].id,
-			name: user[0].name,
-			email: user[0].email,
-			cpf: user[0].cpf,
-		});
-    
-		await db
-			.insert(this.tokens)
-			.values({
+			const tkUser = await jwt.sign({
 				userId: user[0].id,
-				token: tkUser,
-			})
-			.onConflictDoUpdate({
-				target: this.tokens.userId,
-				set: { token: tkUser },
+				name: user[0].name,
+				email: user[0].email,
+				cpf: user[0].cpf,
 			});
 
-		return {
-			message: `Logado`,
-			token: tkUser,
-		};
+			await db
+				.insert(this.tokens)
+				.values({
+					userId: user[0].id,
+					token: tkUser,
+				})
+				.onConflictDoUpdate({
+					target: this.tokens.userId,
+					set: { token: tkUser },
+				});
+
+			return {
+				message: `Logado`,
+				token: tkUser,
+			};
+		} catch (e) {
+			throw new Error("Erro ao logar", e ?? "");
+		}
 	}
-catch (e) {
-throw new Error("Erro ao logar", e  ?? '')
 }
-}}
