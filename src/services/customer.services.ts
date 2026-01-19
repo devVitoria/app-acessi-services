@@ -19,7 +19,6 @@ export class CustomerService {
 				})
 				.from(this.users)
 				.where(eq(this.users.cpf, data.cpf));
-
 			if (channel.length === 0) {
 				throw new Error("Canal não encontrado");
 			}
@@ -31,7 +30,7 @@ export class CustomerService {
 				.set({ emailCode: code })
 				.where(eq(this.users.cpf, data.cpf));
 
-			const code_sent = await sendMail({
+			await sendMail({
 				code: code,
 				name: channel[0].name,
 				email: channel[0].email,
@@ -39,7 +38,7 @@ export class CustomerService {
 
 			return {
 				message: `Código enviado ao canal de recuperação`,
-				id: code_sent,
+				receiver: channel[0].email,
 			};
 		} catch (e) {
 			throw new Error(`Erro ao enviar código de recuperação ${e ?? ""}`);

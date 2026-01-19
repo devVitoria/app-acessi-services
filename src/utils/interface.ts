@@ -18,6 +18,8 @@ export interface UserJwtPayload {
 	name: string;
 	email: string;
 	cpf: string;
+	createdAt: string;
+	validated: boolean;
 }
 
 export interface SendCodeInterface {

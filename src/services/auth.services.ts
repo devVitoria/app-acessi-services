@@ -12,33 +12,29 @@ export class AuthService {
 	private tokens = tokensTable;
 
 	async existingUser(cpf: string, db: any) {
-    try {
-		const user = await db
-			.select()
-			.from(this.users)
-			.where(eq(this.users.cpf, cpf))
-			.limit(1);
-      
-		if (user.length > 0) {
-			return true;
-		}
-		return false;
-	} catch (e) {
-			throw new Error("Erro ao verificar usuário", e ?? "");
-  }
+		try {
+			const user = await db
+				.select()
+				.from(this.users)
+				.where(eq(this.users.cpf, cpf))
+				.limit(1);
 
-} 
+			if (user.length > 0) {
+				return true;
+			}
+			return false;
+		} catch (e) {
+			throw new Error("Erro ao verificar usuário", e ?? "");
+		}
+	}
 
 	async register(data: RegisterInterface, db: any) {
-    
 		try {
-
 			const validation = await this.existingUser(data.cpf, db);
- 
-      if (validation) {
+
+			if (validation) {
 				throw new Error("Usuário já cadastrado com esse CPF.");
 			}
-
 
 			await db.insert(usersTable).values({
 				name: data.name,
@@ -46,7 +42,6 @@ export class AuthService {
 				cpf: data.cpf,
 				password: data.password,
 			});
-
 
 			return {
 				message: `Registrado com sucesso. CPF: ${data.cpf}`,
@@ -80,12 +75,13 @@ export class AuthService {
 			if (user.length === 0) {
 				throw new Error("CPF ou senha inválidos.");
 			}
-
 			const tkUser = await jwt.sign({
 				userId: user[0].id,
 				name: user[0].name,
 				email: user[0].email,
 				cpf: user[0].cpf,
+				createdAt: user[0].created_at,
+				validated: user[0].validated,
 			});
 
 			await db
