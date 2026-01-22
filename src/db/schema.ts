@@ -26,3 +26,30 @@ export const tokensTable = pgTable("tokens", {
 		.references(() => usersTable.id, { onDelete: "cascade" }),
 	token: text().notNull(),
 });
+
+
+export const spendingCategoriesTable = pgTable("spending_categories", {
+	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	userId: integer()
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
+	name: text().notNull(),
+	created_at: timestamp().defaultNow().notNull(),
+
+});
+
+
+export const financeChatTable = pgTable("finance_chat", {
+	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	userId: integer()
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
+	reason: text().notNull(),
+	value: integer().notNull(),
+	category: integer()
+	.default(0)
+		.references(() => spendingCategoriesTable.id, { onDelete: "cascade" }),
+	created_at: timestamp().defaultNow().notNull(),
+		updated_at: timestamp().defaultNow().notNull(),
+
+});

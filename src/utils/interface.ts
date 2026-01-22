@@ -41,3 +41,14 @@ export interface ResetPasswordInterface {
 	cpf: string;
 	newPsd: string;
 }
+
+export interface FinanceChatInterface {
+	value: number;
+	reason: string;
+	category: number;
+	cpf: string;
+}
+
+export interface GetAllFinanceChatsInterface {
+	cpf: string;
+}
