@@ -1,0 +1,1 @@
+ALTER TABLE "finance_chat" ALTER COLUMN "category" DROP DEFAULT;

@@ -27,7 +27,6 @@ export const tokensTable = pgTable("tokens", {
 	token: text().notNull(),
 });
 
-
 export const spendingCategoriesTable = pgTable("spending_categories", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	userId: integer()
@@ -35,9 +34,7 @@ export const spendingCategoriesTable = pgTable("spending_categories", {
 		.references(() => usersTable.id, { onDelete: "cascade" }),
 	name: text().notNull(),
 	created_at: timestamp().defaultNow().notNull(),
-
 });
-
 
 export const financeChatTable = pgTable("finance_chat", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -46,10 +43,9 @@ export const financeChatTable = pgTable("finance_chat", {
 		.references(() => usersTable.id, { onDelete: "cascade" }),
 	reason: text().notNull(),
 	value: integer().notNull(),
-	category: integer()
-	.default(0)
-		.references(() => spendingCategoriesTable.id, { onDelete: "cascade" }),
+	category: integer().references(() => spendingCategoriesTable.id, {
+		onDelete: "cascade",
+	}),
 	created_at: timestamp().defaultNow().notNull(),
-		updated_at: timestamp().defaultNow().notNull(),
-
+	updated_at: timestamp().defaultNow().notNull(),
 });

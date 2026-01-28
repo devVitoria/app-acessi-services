@@ -20,28 +20,27 @@ export const financialRoutes = new Elysia({ prefix: "/financial" })
 				}),
 				reason: t.String(),
 				category: t.Number({
-					minimum: 1,
+					minimum: 0,
 					maximum: 1000000,
 				}),
-                cpf: t.String({
-                    minLength: 11,
-                    maxLength: 11,
-                }),
-			},),
+				cpf: t.String({
+					minLength: 11,
+					maxLength: 11,
+				}),
+			}),
 		},
-	).get(
+	)
+	.get(
 		"/finance-chat",
 		({ db, body }) => {
 			return financialService.getAllChats(body, db);
 		},
 		{
 			body: t.Object({
-                cpf: t.String({
-                    minLength: 11,
-                    maxLength: 11,
-                }),
-			},),
+				cpf: t.String({
+					minLength: 11,
+					maxLength: 11,
+				}),
+			}),
 		},
-	)
-	
-	
+	);
