@@ -1,3 +1,4 @@
+import "./otel"
 import { Elysia } from "elysia";
 import { authRoutes } from "./routes/auth.routes";
 import "dotenv/config";
