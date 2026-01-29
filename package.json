@@ -8,7 +8,8 @@
     "apply:migration": "npx drizzle-kit migrate",
     "format": "biome format --write ./src",
     "lint": "biome lint ./src",
-    "check": "biome check --write ./src"
+    "check": "biome check --write ./src",
+    "all": "cd scripts && bash otel.bat"
   },
   "dependencies": {
     "@elysiajs/jwt": "^1.4.0",
