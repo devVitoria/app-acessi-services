@@ -1,7 +1,11 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import { basePlugin } from "../plugins/base.plugin";
 import { jwtPlugin } from "../plugins/jwt.plugin";
 import { FinancialService } from "../services/financial.services";
+import {
+  FinanceChatQueryTypes,
+  FinanceChatTypes,
+} from "../utils/financial/types";
 
 const financialService = new FinancialService();
 export const financialRoutes = new Elysia({ prefix: "/financial" })
@@ -13,21 +17,7 @@ export const financialRoutes = new Elysia({ prefix: "/financial" })
       return financialService.financeChat(body, db);
     },
     {
-      body: t.Object({
-        value: t.Number({
-          minimum: 0,
-          maximum: 1000000,
-        }),
-        reason: t.String(),
-        category: t.Number({
-          minimum: 0,
-          maximum: 1000000,
-        }),
-        cpf: t.String({
-          minLength: 11,
-          maxLength: 11,
-        }),
-      }),
+      body: FinanceChatTypes,
     },
   )
   .get(
@@ -36,11 +26,6 @@ export const financialRoutes = new Elysia({ prefix: "/financial" })
       return financialService.getAllChats(query, db);
     },
     {
-      query: t.Object({
-        cpf: t.String({
-          minLength: 11,
-          maxLength: 11,
-        }),
-      }),
+      query: FinanceChatQueryTypes,
     },
   );
