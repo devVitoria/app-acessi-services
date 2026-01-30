@@ -1,3 +1,5 @@
+import { Static, t } from "elysia";
+
 export interface LoginInterface {
 	cpf: string;
 	password: string;
@@ -52,3 +54,37 @@ export interface FinanceChatInterface {
 export interface GetAllFinanceChatsInterface {
 	cpf: string;
 }
+
+export const authLoginReqValidator = t.Object({
+				cpf: t.String({
+					minLength: 11,
+					maxLength: 11,
+					error: "CPF inválido",
+				}),
+				password: t.String({
+					minLength: 6,
+					maxLength: 6,
+				})})
+
+export type AuthLoginReq = Static<typeof authLoginReqValidator>;
+
+				
+export const authRegisterReqValidator = t.Object({
+				name: t.String({
+					minLength: 2,
+					maxLength: 100,
+				}),
+				email: t.String({
+					format: "email",
+					error: "Email inválido",
+				}),
+				cpf: t.String({
+					minLength: 11,
+					maxLength: 11,
+					error: "CPF inválido",
+				}),
+				password: t.String({
+					minLength: 6,
+					maxLength: 6,
+				}),
+			})

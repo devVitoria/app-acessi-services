@@ -20,6 +20,7 @@
     "@opentelemetry/sdk-node": "^0.211.0",
     "@opentelemetry/sdk-trace-base": "^2.5.0",
     "@sinclair/typebox": "^0.34.47",
+    "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "elysia": "latest",
