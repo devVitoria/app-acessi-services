@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { basePlugin } from "../plugins/base.plugin";
 import { jwtPlugin } from "../plugins/jwt.plugin";
 import { AuthService } from "../services/auth.services";
-import { loginTypes, registerTypes } from "../utils/auth/types";
+import { loginTypes, registerTypes, verifyToken } from "../utils/auth/types";
 import { JwtPayloadInterface, UserJwtPayload } from "../utils/interface";
 
 const authservice = new AuthService();
@@ -30,5 +30,18 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
     },
     {
       body: loginTypes,
+    },
+  )
+  .post(
+    "/verify-token",
+    ({ db, body, jwt }) => {
+      return authservice.verifyToken(
+        body,
+        db,
+        jwt as unknown as JwtPayloadInterface<UserJwtPayload>,
+      );
+    },
+    {
+      body: verifyToken,
     },
   );

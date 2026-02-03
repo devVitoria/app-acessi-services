@@ -31,3 +31,7 @@ export const registerTypes = t.Object({
     maxLength: 6,
   }),
 });
+
+export const verifyToken = t.Object({
+  token: t.String(),
+});
